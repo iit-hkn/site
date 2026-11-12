@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import { EVENTS_TIMEZONE } from '../consts';
+
+interface Props {
+	/** Maximum number of events to show. */
+	limit?: number;
+}
+
+const { limit = 8 } = Astro.props;
+
+const events = (await getCollection('events'))
+	.map((e) => e.data)
+	.sort((a, b) => a.start.getTime() - b.start.getTime())
+	.slice(0, limit);
+
+// All-day dates are stored as UTC midnight; timed events display in the chapter's timezone.
+const tz = (allDay: boolean) => (allDay ? 'UTC' : EVENTS_TIMEZONE);
+
+const fmt = (date: Date, allDay: boolean, opts: Intl.DateTimeFormatOptions) =>
+	date.toLocaleString('en-US', { timeZone: tz(allDay), ...opts });
+
+function timeLabel(start: Date, end: Date, allDay: boolean) {
+	if (allDay) {
+		// ICS all-day end dates are exclusive.
+		const lastDay = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+		if (lastDay <= start) return 'All day';
+		return `Through ${fmt(lastDay, true, { month: 'short', day: 'numeric' })}`;
+	}
+	const time: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
+	return `${fmt(start, false, time)} – ${fmt(end, false, time)}`;
+}
+---
+
+{
+	events.length === 0 ? (
+		<p class="empty">No upcoming events right now. Check back soon!</p>
+	) : (
+		<ol class="events">
+			{events.map(({ title, start, end, allDay, location }) => (
+				<li>
+					<time class="date" datetime={start.toISOString()}>
+						<span class="month">{fmt(start, allDay, { month: 'short' })}</span>
+						<span class="day">{fmt(start, allDay, { day: 'numeric' })}</span>
+						<span class="weekday">{fmt(start, allDay, { weekday: 'short' })}</span>
+					</time>
+					<div class="details">
+						<h3>{title}</h3>
+						<p class="meta">
+							{timeLabel(start, end, allDay)}
+							{location && <span class="location"> · {location}</span>}
+						</p>
+					</div>
+				</li>
+			))}
+		</ol>
+	)
+}
+
+<style>
+	.events {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 2em;
+	}
+	.events li {
+		display: flex;
+		gap: 1em;
+		align-items: center;
+		padding: 0.75em 0;
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.events li:last-child {
+		border-bottom: none;
+	}
+	.date {
+		flex: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 4em;
+		padding: 0.4em 0;
+		border-radius: 8px;
+		background: rgba(var(--gray-light), 60%);
+		line-height: 1.1;
+	}
+	.month,
+	.weekday {
+		font-size: 0.65em;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: rgb(var(--gray));
+	}
+	.month {
+		color: var(--accent);
+		font-weight: 700;
+	}
+	.day {
+		font-size: 1.5em;
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+	.details {
+		min-width: 0;
+	}
+	.details h3 {
+		font-size: 1.1em;
+		margin: 0;
+	}
+	.meta {
+		margin: 0.15em 0 0;
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+	}
+	.empty {
+		color: rgb(var(--gray));
+	}
+</style>
