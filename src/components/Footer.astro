@@ -3,26 +3,34 @@ const today = new Date();
 ---
 
 <footer>
-	&copy; {today.getFullYear()} HKN @ Illinois Tech | <a href="https://hkn.ieee.org/">A Chapter of Eta Kappa Nu</a>
+	<p class="name">IEEE-HKN · Illinois Institute of Technology</p>
+	<p>
+		&copy; {today.getFullYear()} HKN @ Illinois Tech · <a href="https://hkn.ieee.org/">A Chapter of IEEE-Eta Kappa Nu</a>
+	</p>
 </footer>
 <style>
 	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
+		padding: 2.5em 1em 3em;
+		background: rgb(var(--black));
+		border-top: 6px solid var(--accent);
+		color: #bbb;
 		text-align: center;
+		font-size: 0.85em;
 	}
-	.social-links {
-		display: flex;
-		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
+	footer p {
+		margin: 0.25em 0;
 	}
-	.social-links a {
-		text-decoration: none;
-		color: rgb(var(--gray));
+	.name {
+		font-family: var(--font-heading);
+		font-weight: 600;
+		font-size: 1.15em;
+		color: #fff;
 	}
-	.social-links a:hover {
-		color: rgb(var(--gray-dark));
+	a {
+		color: #fff;
+	}
+	a:hover {
+		color: #fff;
+		text-decoration-color: var(--accent);
 	}
 </style>

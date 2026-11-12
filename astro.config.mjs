@@ -9,28 +9,23 @@ export default defineConfig({
 	site: 'https://iit-hkn.github.io/',
 	base: '/site',
 	integrations: [mdx(), sitemap()],
+	// Free stand-ins for Illinois Tech's brand fonts (Futura / Neue Haas Grotesk, which are licensed).
 	fonts: [
 		{
-			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
+			provider: fontProviders.google(),
+			name: 'Jost',
+			cssVariable: '--font-heading',
+			weights: [400, 600, 700],
+			styles: ['normal'],
+			fallbacks: ['Futura', 'sans-serif'],
+		},
+		{
+			provider: fontProviders.google(),
+			name: 'Source Sans 3',
+			cssVariable: '--font-body',
+			weights: [400, 600, 700],
+			styles: ['normal', 'italic'],
 			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
-						style: 'normal',
-						display: 'swap',
-					},
-					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
-						style: 'normal',
-						display: 'swap',
-					},
-				],
-			},
 		},
 	],
 });

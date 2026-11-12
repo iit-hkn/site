@@ -1,5 +1,4 @@
 ---
-import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import hkn from '../assets/IEEEEtaKappaNuLogo-Horizontal.svg';
 
@@ -9,11 +8,9 @@ const homeHref = base || '/';
 
 <header>
 	<nav>
-		<h2>
-			<a href="/">
-				<img src={hkn.src} alt="Eta Kappa Nu Crest">
-			</a>
-		</h2>
+		<a class="logo" href={homeHref}>
+			<img src={hkn.src} alt="IEEE Eta Kappa Nu" />
+		</a>
 		<div class="internal-links">
 			<HeaderLink href={homeHref}>Home</HeaderLink>
 			<HeaderLink href={`${base}/blog`}>Blog</HeaderLink>
@@ -25,46 +22,61 @@ const homeHref = base || '/';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+		background: #fff;
+		border-top: 6px solid var(--accent);
+		box-shadow: 0 1px 0 rgb(var(--gray-light));
 	}
 	nav {
 		display: flex;
 		align-items: center;
-		justify-content: flex-start;
+		justify-content: space-between;
+		gap: 1em;
+		max-width: 1100px;
+		margin: 0 auto;
+		min-height: 4.5rem;
+	}
+	.logo {
+		display: flex;
+		align-items: center;
+		padding: 0.75em 0;
+	}
+	.logo img {
+		height: 2.75rem;
+		width: auto;
+		border-radius: 0;
 	}
 	.internal-links {
 		display: flex;
+		align-self: stretch;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
+	.internal-links :global(a) {
+		display: flex;
+		align-items: center;
+		padding: 0 0.85em;
+		font-family: var(--font-heading);
+		font-weight: 600;
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: rgb(var(--black));
+		text-decoration: none;
 		border-bottom: 4px solid transparent;
-		text-decoration: none;
+		border-top: 4px solid transparent;
 	}
-	nav a.active {
-		text-decoration: none;
+	.internal-links :global(a:hover) {
+		color: var(--accent);
+	}
+	.internal-links :global(a.active) {
+		color: var(--accent);
 		border-bottom-color: var(--accent);
 	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
-	.social-links {
-		margin-left: auto;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
+	@media (max-width: 560px) {
+		nav {
+			flex-direction: column;
+			gap: 0;
+		}
+		.internal-links :global(a) {
+			padding: 0.75em 0.6em;
 		}
 	}
 </style>
