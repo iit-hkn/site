@@ -1,4 +1,4 @@
-# Astro Starter Kit: Blog
+# Illinois Tech Eta Kappa Nu Site
 
 Source code of the official site of Eta Kappa Nu's Delta Chapter at Illinois Tech.
 
